@@ -1,0 +1,82 @@
+version: "3"
+
+services:
+    db:
+        image: postgres
+        container_name: example_db
+        env_file:
+            - ./django_core/.env
+
+        expose:
+            - 5432
+
+        volumes:
+            - ./dbs/postgres-data:/var/lib/postgresql/data
+
+    redis:
+        image: redis
+        container_name: example_redis
+
+        restart: always
+
+        expose:
+            - 6379
+
+        volumes:
+            - ./dbs/redis-data:/data/
+
+    backend:
+        image: template_django_core
+        container_name: template_django_core
+        build: ./django_core
+        env_file:
+            - ./django_core/.env
+
+        command: bash -c "
+            python3 manage.py makemigrations &&
+            python3 manage.py migrate &&
+            python manage.py collectstatic --noinput &&
+            gunicorn -w 3 django_core.wsgi:application --bind 0.0.0.0:8000 --reload"
+
+        restart: always
+
+        expose:
+            - 8000
+
+        volumes:
+            - ./django_core:/var/www/apps/django_core
+
+        depends_on:
+            - db
+            - redis
+
+    celery:
+        image: template_django_core
+        container_name: example_celery
+        env_file:
+            - ./django_core/.env
+
+        command: celery -A django_core worker -B -l DEBUG -c 3
+
+        restart: always
+
+        volumes:
+            - ./django_core:/var/www/apps/django_core
+
+        depends_on:
+            - redis
+
+    nginx:
+        build: ./nginx
+
+        restart: always
+
+        ports:
+            - 1337:80
+
+        volumes:
+            - ./django_core/media:/var/www/media
+            - ./django_core/static:/var/www/static
+
+        depends_on:
+            - backend
