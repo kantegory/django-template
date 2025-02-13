@@ -186,7 +186,6 @@ MEDIA_ROOT = BASE_DIR / "media"
 # https://djoser.readthedocs.io/en/latest/settings.html
 
 DJOSER = {
-    "LOGIN_FIELD": "email",
     "TOKEN_MODEL": None,  # We use only JWT
     "HIDE_USERS": False,
 }
