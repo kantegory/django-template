@@ -1,6 +1,6 @@
 services:
     db:
-        image: postgres
+        image: postgres:17
         container_name: example_db
         env_file:
             - ./django_core/.env
@@ -10,6 +10,12 @@ services:
 
         volumes:
             - ./dbs/postgres-data:/var/lib/postgresql/data
+
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
 
     redis:
         image: redis
@@ -23,6 +29,12 @@ services:
         volumes:
             - ./dbs/redis-data:/data/
 
+        healthcheck:
+            test: ["CMD", "redis-cli", "ping"]
+            interval: 5s
+            timeout: 3s
+            retries: 5
+
     backend:
         image: template_django_core
         container_name: template_django_core
@@ -31,8 +43,7 @@ services:
             - ./django_core/.env
 
         command: bash -c "
-            python3 manage.py makemigrations &&
-            python3 manage.py migrate &&
+            python manage.py migrate &&
             python manage.py collectstatic --noinput &&
             gunicorn -w 3 django_core.wsgi:application --bind 0.0.0.0:8000 --reload"
 
@@ -45,8 +56,10 @@ services:
             - ./django_core:/var/www/apps/django_core
 
         depends_on:
-            - db
-            - redis
+            db:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
 
     celery:
         image: template_django_core
@@ -62,7 +75,10 @@ services:
             - ./django_core:/var/www/apps/django_core
 
         depends_on:
-            - redis
+            redis:
+                condition: service_healthy
+            backend:
+                condition: service_started
 
     nginx:
         build: ./nginx
