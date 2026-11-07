@@ -5,7 +5,6 @@ node_modules
 __pycache__/
 static/
 media/
-celerybeat-schedule
 
 # local env files
 .env

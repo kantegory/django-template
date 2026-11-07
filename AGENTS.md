@@ -14,12 +14,12 @@ Instructions and operational context for agents working in this repository.
 
 ## Architecture & Layout
 
-- **Template stack**: Python 3.12, Django 5.0.4, Celery 5.3.6, PostgreSQL, Redis, Nginx, Gunicorn.
+- **Template stack**: Python 3.12, Django 5.0.4, Dramatiq 2.2.1, PostgreSQL, Redis, Nginx, Gunicorn.
 - **Directory root vs. Django root**: The Django project lives inside `django_core/` (`django_core/manage.py`), not the workspace root.
 - **Nginx host port**: Nginx maps container port `80` to host port `3337` (`http://localhost:3337`).
 - **Services in Docker Compose**:
   - `backend`: Gunicorn reload on `8000`. Runs `migrate` and `collectstatic` on startup.
-  - `celery`: Runs Celery worker + beat scheduler together (`celery -A django_core worker -B -l DEBUG -c 3`).
+  - `dramatiq`: Runs Dramatiq worker (`python manage.py rundramatiq`).
   - `db`: PostgreSQL with volume mounted to `./dbs/postgres-data`.
   - `redis`: Redis with volume mounted to `./dbs/redis-data`.
   - `nginx`: Reverse proxy with media/static mounts.
@@ -74,7 +74,7 @@ flake8 .
   - Auth: `/<BASE_URL><API_PREFIX>auth/` (Djoser + JWT blacklist).
   - Admin: `/<BASE_URL>admin/`.
 - **Redis DB Allocations**:
-  - `db 0`: Default cache and Celery broker.
+  - `db 0`: Default cache and Dramatiq broker (`DRAMATIQ_BROKER_URL`).
   - `db 1`: Blacklisted JWT refresh tokens (`caches["blacklist"]`).
   - `db 2`: Endpoint cache (`caches["endpoints"]`).
   - `db 4`: Constance live settings (`constance.backends.redisd.CachingRedisBackend`).

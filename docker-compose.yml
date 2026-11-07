@@ -61,13 +61,13 @@ services:
             redis:
                 condition: service_healthy
 
-    celery:
+    dramatiq:
         image: template_django_core
-        container_name: template_celery
+        container_name: template_dramatiq
         env_file:
             - ./django_core/.env
 
-        command: celery -A django_core worker -B -l DEBUG -c 3
+        command: python manage.py rundramatiq
 
         restart: always
 

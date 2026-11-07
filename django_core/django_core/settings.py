@@ -38,6 +38,7 @@ DJANGO_APPS = [
 # External apps
 THIRD_PARTY_APPS = [
     "corsheaders",
+    "django_dramatiq",
     "rest_framework",
     "drf_spectacular",
     "djoser",
@@ -205,6 +206,28 @@ SPECTACULAR_SETTINGS = {
 
 REDIS_HOST = env.str("REDIS_HOST")
 REDIS_PORT = env.str("REDIS_PORT")
+
+# Dramatiq
+# https://django-dramatiq.readthedocs.io/
+
+DRAMATIQ_BROKER = {
+    "BROKER": "dramatiq.brokers.redis.RedisBroker",
+    "OPTIONS": {
+        "url": env.str("DRAMATIQ_BROKER_URL", f"redis://{REDIS_HOST}:{REDIS_PORT}/0"),
+    },
+    "MIDDLEWARE": [
+        "dramatiq.middleware.AgeLimit",
+        "dramatiq.middleware.TimeLimit",
+        "dramatiq.middleware.Callbacks",
+        "dramatiq.middleware.Pipelines",
+        "dramatiq.middleware.Retries",
+        "django_dramatiq.middleware.DbConnectionsMiddleware",
+        "django_dramatiq.middleware.AdminMiddleware",
+        "periodiq.PeriodiqMiddleware",
+    ],
+}
+
+DRAMATIQ_AUTODISCOVER_MODULES = ["tasks"]
 
 # Constance
 # https://django-constance.readthedocs.io/en/latest/
