@@ -39,10 +39,6 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "corsheaders",
     "django_dramatiq",
-    "rest_framework",
-    "drf_spectacular",
-    "djoser",
-    "django_filters",
     "tinymce",
     "constance",
 ]
@@ -121,8 +117,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # CSRF settings
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:1337",
-    "http://127.0.0.1:1337",
+    "http://localhost:3337",
+    "http://127.0.0.1:3337",
 ]
 
 # CORS headers
@@ -142,27 +138,12 @@ CORS_ALLOW_METHODS = [
     "PUT"
 ]
 
-# DRF settings
-# https://www.django-rest-framework.org/
-
-REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ),
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-    "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 10,
-}
-
 
 # Internationalization
 
 LANGUAGE_CODE = "ru-ru"
 TIME_ZONE = "Europe/Moscow"
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
 
 # Default primary key field type
@@ -182,25 +163,6 @@ STATIC_ROOT = BASE_DIR / "static"
 MEDIA_URL = f"/{BASE_URL}media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-
-# Djoser
-# https://djoser.readthedocs.io/en/latest/settings.html
-
-DJOSER = {
-    "TOKEN_MODEL": None,  # We use only JWT
-    "HIDE_USERS": False,
-}
-
-
-# DRF Spectacular
-# https://drf-spectacular.readthedocs.io/en/latest/readme.html
-
-SPECTACULAR_SETTINGS = {
-    "TITLE": "REST API",
-    "DESCRIPTION": "REST API",
-    "VERSION": "0.0.1",
-    "COMPONENT_SPLIT_REQUEST": True,
-}
 
 # Redis
 
@@ -333,7 +295,14 @@ USE_ENDPOINT_CACHE = env.bool("USE_ENDPOINT_CACHE", True)
 S3_ENABLED = env.bool("S3_ENABLED", False)
 
 if S3_ENABLED:
-    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
 
 AWS_ACCESS_KEY_ID = env.str("S3_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = env.str("S3_SECRET_ACCESS_KEY")

@@ -14,7 +14,7 @@ Instructions and operational context for agents working in this repository.
 
 ## Architecture & Layout
 
-- **Template stack**: Python 3.12, Django 5.0.4, Dramatiq 2.2.1, PostgreSQL, Redis, Nginx, Gunicorn.
+- **Template stack**: Python 3.12, Django 6.1.3, Dramatiq 2.2.1, PostgreSQL, Redis, Nginx, Gunicorn.
 - **Directory root vs. Django root**: The Django project lives inside `django_core/` (`django_core/manage.py`), not the workspace root.
 - **Nginx host port**: Nginx maps container port `80` to host port `3337` (`http://localhost:3337`).
 - **Services in Docker Compose**:
@@ -69,9 +69,7 @@ flake8 .
 - **Environment File**: Located at `django_core/.env` (copy from `django_core/.env.example`). Loaded via `django-environ` in `settings.py`. Required keys: `SECRET_KEY`, `DB_ENGINE`, `POSTGRES_*`, `REDIS_*`, `S3_*`.
 - **URL Prefixes**:
   - URLs are prefixed by `BASE_URL` (default `""`) and `API_PREFIX` (default `"api/"`).
-  - Swagger UI: `http://localhost:3337/<BASE_URL><API_PREFIX>docs/swagger/` (e.g. `/api/docs/swagger/`).
-  - OpenAPI Schema: `/<BASE_URL><API_PREFIX>docs/`.
-  - Auth: `/<BASE_URL><API_PREFIX>auth/` (Djoser + JWT blacklist).
+  - Auth: `/<BASE_URL><API_PREFIX>auth/` (users app).
   - Admin: `/<BASE_URL>admin/`.
 - **Redis DB Allocations**:
   - `db 0`: Default cache and Dramatiq broker (`DRAMATIQ_BROKER_URL`).
@@ -83,4 +81,4 @@ flake8 .
 
 ## Known Code Quirks & Warnings
 
-- **Missing `SIMPLE_JWT` setting**: `django_core/users/views.py` (`BlacklistTokenView`) references `settings.SIMPLE_JWT["REFRESH_TOKEN_LIFETIME"]`, but `SIMPLE_JWT` is not defined in `settings.py`. Define `SIMPLE_JWT = {"REFRESH_TOKEN_LIFETIME": ...}` before invoking token blacklist endpoints.
+- **CSRF Origin on Host Port 3337**: Requests via Nginx from host must be listed in `CSRF_TRUSTED_ORIGINS` (includes `http://localhost:3337` and `http://127.0.0.1:3337`).
