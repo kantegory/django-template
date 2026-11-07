@@ -14,7 +14,7 @@ Instructions and operational context for agents working in this repository.
 
 ## Architecture & Layout
 
-- **Template stack**: Python 3.12, Django 6.1.3, Django Modern REST (DMR), Dramatiq 2.2.1, PostgreSQL, Redis, Nginx, Gunicorn.
+- **Template stack**: Python 3.12, Django 6.1.3, Django Modern REST (DMR), Dramatiq 2.2.1, Psycopg 3, PostgreSQL, Redis, Nginx, Gunicorn.
 - **Directory root vs. Django root**: The Django project lives inside `django_core/` (`django_core/manage.py`), not the workspace root.
 - **Nginx host port**: Nginx maps container port `80` to host port `3337` (`http://localhost:3337`).
 - **Services in Docker Compose**:
@@ -66,7 +66,8 @@ flake8 .
 
 ## Configuration & Environment Gotchas
 
-- **Environment File**: Located at `django_core/.env` (copy from `django_core/.env.example`). Loaded via `django-environ` in `settings.py`. Required keys: `SECRET_KEY`, `DB_ENGINE`, `POSTGRES_*`, `REDIS_*`, `S3_*`, `JWT_*`.
+- **Environment File**: Located at `django_core/.env` (copy from `django_core/.env.example`). Loaded via `django-environ` in `settings.py`. Required / configurable keys: `SECRET_KEY`, `DB_ENGINE`, `POSTGRES_*`, `REDIS_*`, `S3_*`, `JWT_*`, `CSRF_TRUSTED_ORIGINS`, `CORS_ALLOWED_ORIGINS`.
+- **Database & Constance**: Uses `psycopg` (v3) driver (`django.db.backends.postgresql`). Constance settings use `DatabaseBackend` (`constance.backends.database`) persisted in PostgreSQL with caching.
 - **URL Prefixes**:
   - URLs are prefixed by `BASE_URL` (default `""`) and `API_PREFIX` (default `"api/"`).
   - Auth: `/<BASE_URL><API_PREFIX>auth/` (users app: `register/`, `login/`, `jwt/refresh/`, `jwt/verify/`, `jwt/blacklist/`, `me/`).

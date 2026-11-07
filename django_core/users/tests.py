@@ -1,10 +1,13 @@
+import io
 from http import HTTPStatus
+from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from dmr.test import DMRClient
 
 from users.constants import AuthErrorCode
+from users.tasks import example_task
 
 User = get_user_model()
 
@@ -179,3 +182,17 @@ class UserAuthAPITests(TestCase):
             data={"access_token": "invalid.jwt.token"},
         )
         self.assertEqual(invalid_resp.status_code, HTTPStatus.UNAUTHORIZED)
+
+
+class DramatiqTasksTests(TestCase):
+    def test_example_task_execution(self):
+        with patch("sys.stdout", new_callable=io.StringIO) as mock_out:
+            example_task.fn("custom message")
+            output = mock_out.getvalue()
+        self.assertIn("[Dramatiq] Task executed: custom message", output)
+
+    def test_example_task_default_argument(self):
+        with patch("sys.stdout", new_callable=io.StringIO) as mock_out:
+            example_task.fn()
+            output = mock_out.getvalue()
+        self.assertIn("[Dramatiq] Task executed: Hello from Dramatiq", output)

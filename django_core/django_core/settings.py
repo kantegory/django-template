@@ -121,18 +121,18 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # CSRF settings
-CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:3337",
-    "http://127.0.0.1:3337",
-]
+CSRF_TRUSTED_ORIGINS = env.list(
+    "CSRF_TRUSTED_ORIGINS",
+    default=["http://localhost:3337", "http://127.0.0.1:3337"],
+)
 
 # CORS headers
 # https://pypi.org/project/django-cors-headers/
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8080",
-    "http://127.0.0.1:8080"
-]
+CORS_ALLOWED_ORIGINS = env.list(
+    "CORS_ALLOWED_ORIGINS",
+    default=["http://localhost:8080", "http://127.0.0.1:8080"],
+)
 
 CORS_ALLOW_METHODS = [
     "DELETE",
