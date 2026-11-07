@@ -85,6 +85,9 @@ services:
         ports:
             - 3337:80
 
+        env_file:
+            - ./nginx/.env
+
         volumes:
             - ./django_core/media:/var/www/media
             - ./django_core/static:/var/www/static

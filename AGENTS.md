@@ -66,7 +66,9 @@ flake8 .
 
 ## Configuration & Environment Gotchas
 
-- **Environment File**: Located at `django_core/.env` (copy from `django_core/.env.example`). Loaded via `django-environ` in `settings.py`. Required / configurable keys: `SECRET_KEY`, `DB_ENGINE`, `POSTGRES_*`, `REDIS_*`, `S3_*`, `JWT_*`, `CSRF_TRUSTED_ORIGINS`, `CORS_ALLOWED_ORIGINS`.
+- **Environment Files**:
+  - `django_core/.env` (copy from `django_core/.env.example`): Loaded via `django-environ` in `settings.py` and Docker Compose for `backend`, `dramatiq`, and `db`. Required keys: `SECRET_KEY`, `DB_ENGINE`, `POSTGRES_*`, `REDIS_*`, `S3_*`, `JWT_*`, `CSRF_TRUSTED_ORIGINS`, `CORS_ALLOWED_ORIGINS`.
+  - `nginx/.env` (copy from `nginx/.env.example`): Loaded in Docker Compose for `nginx`. Configurable keys: `NGINX_CLIENT_MAX_BODY_SIZE`.
 - **Database & Constance**: Uses `psycopg` (v3) driver (`django.db.backends.postgresql`). Constance settings use `DatabaseBackend` (`constance.backends.database`) persisted in PostgreSQL with caching.
 - **URL Prefixes**:
   - URLs are prefixed by `BASE_URL` (default `""`) and `API_PREFIX` (default `"api/"`).

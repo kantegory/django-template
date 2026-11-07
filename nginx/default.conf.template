@@ -1,0 +1,64 @@
+upstream backend {
+    server backend:8000;
+    keepalive 32;
+}
+
+server {
+    listen 80;
+    http2 on;
+
+    server_tokens off;
+
+    client_max_body_size ${NGINX_CLIENT_MAX_BODY_SIZE};
+    client_body_buffer_size 128k;
+
+    # Gzip settings for text and static assets
+    gzip on;
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_comp_level 6;
+    gzip_min_length 1024;
+    gzip_types
+        text/plain
+        text/css
+        text/xml
+        text/javascript
+        application/json
+        application/javascript
+        application/x-javascript
+        application/xml
+        application/xml+rss
+        image/svg+xml
+        font/woff
+        font/woff2;
+
+    location / {
+        proxy_pass http://backend;
+        proxy_http_version 1.1;
+
+        proxy_set_header Connection "";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
+
+        proxy_redirect off;
+    }
+
+    # Static assets (CSS, JS, fonts, etc.)
+    location /static/ {
+        alias /var/www/static/;
+        expires 30d;
+        add_header Cache-Control "public, no-transform";
+        access_log off;
+        log_not_found off;
+    }
+
+    # User uploaded media (images, files) - gzip disabled (already compressed formats)
+    location /media/ {
+        alias /var/www/media/;
+        gzip off;
+        expires 7d;
+        add_header Cache-Control "public, no-transform";
+    }
+}
