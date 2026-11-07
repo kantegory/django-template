@@ -76,7 +76,6 @@ flake8 .
   - `db 0`: Default cache and Dramatiq broker (`DRAMATIQ_BROKER_URL`).
   - `db 1`: Blacklisted JWT refresh tokens (`caches["blacklist"]`).
   - `db 2`: Endpoint cache (`caches["endpoints"]`).
-  - `db 4`: Constance live settings (`constance.backends.redisd.CachingRedisBackend`).
 
 ---
 

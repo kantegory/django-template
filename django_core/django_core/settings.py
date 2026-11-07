@@ -45,6 +45,7 @@ THIRD_PARTY_APPS = [
     "dmr",
     "tinymce",
     "constance",
+    "constance.backends.database",
 ]
 
 # Internal apps
@@ -220,28 +221,21 @@ JWT_ALGORITHM = env.str("JWT_ALGORITHM", default="HS256")
 # Constance
 # https://django-constance.readthedocs.io/en/latest/
 
-CONSTANCE_BACKEND = "constance.backends.redisd.CachingRedisBackend"
-
-CONSTANCE_REDIS_CONNECTION = {
-    "host": REDIS_HOST,
-    "port": REDIS_PORT,
-    "db": 4,
-}
-
-CONSTANCE_REDIS_CACHE_TIMEOUT = 60 * 5
+CONSTANCE_BACKEND = "constance.backends.database.DatabaseBackend"
+CONSTANCE_DATABASE_CACHE_BACKEND = "default"
 
 CONSTANCE_CONFIG = {
     "EXAMPLE_SETTING": (
         "Пример настройки",
         "Заголовок примера настройки",
-        str
-    )
+        str,
+    ),
 }
 
 CONSTANCE_CONFIG_FIELDSETS = {
     "Пример группы настроек": (
         "EXAMPLE_SETTING",
-    )
+    ),
 }
 
 # Sentry
