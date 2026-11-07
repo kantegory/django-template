@@ -42,10 +42,7 @@ services:
         env_file:
             - ./django_core/.env
 
-        command: bash -c "
-            python manage.py migrate &&
-            python manage.py collectstatic --noinput &&
-            gunicorn -w 3 django_core.wsgi:application --bind 0.0.0.0:8000 --reload"
+        command: gunicorn -w 3 django_core.wsgi:application --bind 0.0.0.0:8000 --reload
 
         restart: always
 
