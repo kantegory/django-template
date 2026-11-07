@@ -14,7 +14,7 @@ Instructions and operational context for agents working in this repository.
 
 ## Architecture & Layout
 
-- **Template stack**: Python 3.12, Django 6.1.3, Dramatiq 2.2.1, PostgreSQL, Redis, Nginx, Gunicorn.
+- **Template stack**: Python 3.12, Django 6.1.3, Django Modern REST (DMR), Dramatiq 2.2.1, PostgreSQL, Redis, Nginx, Gunicorn.
 - **Directory root vs. Django root**: The Django project lives inside `django_core/` (`django_core/manage.py`), not the workspace root.
 - **Nginx host port**: Nginx maps container port `80` to host port `3337` (`http://localhost:3337`).
 - **Services in Docker Compose**:
@@ -66,10 +66,11 @@ flake8 .
 
 ## Configuration & Environment Gotchas
 
-- **Environment File**: Located at `django_core/.env` (copy from `django_core/.env.example`). Loaded via `django-environ` in `settings.py`. Required keys: `SECRET_KEY`, `DB_ENGINE`, `POSTGRES_*`, `REDIS_*`, `S3_*`.
+- **Environment File**: Located at `django_core/.env` (copy from `django_core/.env.example`). Loaded via `django-environ` in `settings.py`. Required keys: `SECRET_KEY`, `DB_ENGINE`, `POSTGRES_*`, `REDIS_*`, `S3_*`, `JWT_*`.
 - **URL Prefixes**:
   - URLs are prefixed by `BASE_URL` (default `""`) and `API_PREFIX` (default `"api/"`).
-  - Auth: `/<BASE_URL><API_PREFIX>auth/` (users app).
+  - Auth: `/<BASE_URL><API_PREFIX>auth/` (users app: `register/`, `login/`, `jwt/refresh/`, `jwt/verify/`, `jwt/blacklist/`, `me/`).
+  - OpenAPI / Swagger UI: `/<BASE_URL><API_PREFIX>docs/swagger/` and schema at `/<BASE_URL><API_PREFIX>docs/schema.json`.
   - Admin: `/<BASE_URL>admin/`.
 - **Redis DB Allocations**:
   - `db 0`: Default cache and Dramatiq broker (`DRAMATIQ_BROKER_URL`).
@@ -82,3 +83,8 @@ flake8 .
 ## Known Code Quirks & Warnings
 
 - **CSRF Origin on Host Port 3337**: Requests via Nginx from host must be listed in `CSRF_TRUSTED_ORIGINS` (includes `http://localhost:3337` and `http://127.0.0.1:3337`).
+- **Django Modern REST (DMR) Conventions**:
+  - DMR skills for AI agents are available in `.agents/skills/` (`dmr`, `dmr-from-drf`, `dmr-from-django-ninja`, `dmr-from-dj-rest-auth`, `dmr-openapi-skeleton`, `dmr-upgrade`).
+  - Controller methods expect request body argument named strictly `parsed_body: Body[...]` (not `body`).
+  - Do NOT create a module named `jwt.py` in apps (e.g. `users/jwt.py`), as DMR's `dmr.security.jwt` will accidentally perform relative imports from it instead of the system PyJWT package. Use `tokens.py`.
+  - `DMR_SETTINGS["exclude_validate_responses"]` requires `HTTPStatus` enum members (from `http import HTTPStatus`), not plain integers.

@@ -1,5 +1,8 @@
+from http import HTTPStatus
+import datetime as dt
 from pathlib import Path
 import environ
+from dmr.settings import Settings
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,6 +42,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "corsheaders",
     "django_dramatiq",
+    "dmr",
     "tinymce",
     "constance",
 ]
@@ -190,6 +194,28 @@ DRAMATIQ_BROKER = {
 }
 
 DRAMATIQ_AUTODISCOVER_MODULES = ["tasks"]
+
+# Django Modern REST
+# https://github.com/wemake-services/django-modern-rest
+
+DMR_SETTINGS = {
+    Settings.exclude_validate_responses: {
+        HTTPStatus.BAD_REQUEST,
+        HTTPStatus.UNAUTHORIZED,
+        HTTPStatus.FORBIDDEN,
+        HTTPStatus.NOT_FOUND,
+        HTTPStatus.INTERNAL_SERVER_ERROR,
+    },
+}
+
+# JWT Authentication
+JWT_ACCESS_TOKEN_LIFETIME = dt.timedelta(
+    minutes=env.int("JWT_ACCESS_TOKEN_LIFETIME_MINUTES", default=15)
+)
+JWT_REFRESH_TOKEN_LIFETIME = dt.timedelta(
+    days=env.int("JWT_REFRESH_TOKEN_LIFETIME_DAYS", default=7)
+)
+JWT_ALGORITHM = env.str("JWT_ALGORITHM", default="HS256")
 
 # Constance
 # https://django-constance.readthedocs.io/en/latest/

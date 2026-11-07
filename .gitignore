@@ -29,3 +29,6 @@ pnpm-debug.log*
 # Vim files
 *~
 *.swp
+
+# Specific agents folders
+.agents/
