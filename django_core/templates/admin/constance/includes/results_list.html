@@ -1,0 +1,80 @@
+{% load admin_list static i18n %}
+<div id="results" class="constance-table-wrapper">
+    <table class="table table-hover table-striped table-bordered align-middle m-0">
+        <thead class="table-light">
+            <tr>
+                <th style="width: 28%;"><div class="text font-weight-bold">{% trans "Name" %}</div></th>
+                <th style="width: 25%;"><div class="text font-weight-bold">{% trans "Default" %}</div></th>
+                <th style="width: 37%;"><div class="text font-weight-bold">{% trans "Value" %}</div></th>
+                <th style="width: 10%; text-align: center;"><div class="text font-weight-bold">{% trans "Is modified" %}</div></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in config_values %}
+        <tr class="{% cycle 'row1' 'row2' %}">
+            <th class="align-top py-3" scope="row">
+                <div class="d-flex align-items-center mb-1">
+                    <span class="item-name font-weight-bold text-monospace" id="{{ item.name|slugify }}">
+                        {{ item.name }}
+                    </span>
+                    <a class="item-anchor text-muted ms-2" href="#{{ item.name|slugify }}" title="Ссылка на эту настройку">
+                        <i class="fas fa-link fa-xs"></i>
+                    </a>
+                </div>
+                {% if item.help_text %}
+                    <div class="help text-muted small mt-1 font-weight-normal">{{ item.help_text|linebreaksbr }}</div>
+                {% endif %}
+            </th>
+            <td class="align-top py-3">
+                <div class="constance-default-val bg-light p-2 rounded border small text-break text-monospace">
+                    {{ item.default|linebreaksbr }}
+                </div>
+            </td>
+            <td class="align-top py-3">
+                {% if item.form_field.errors %}
+                    <div class="text-danger small mb-1">{{ item.form_field.errors }}</div>
+                {% endif %}
+                {% if item.is_file %}
+                    <div class="mb-2 small">
+                        {% trans "Current file" %}: <a href="{% get_media_prefix as MEDIA_URL %}{{ MEDIA_URL }}{{ item.value }}" target="_blank">{{ item.value }}</a>
+                    </div>
+                {% endif %}
+                <div class="constance-input-wrapper">
+                    {{ item.form_field }}
+                </div>
+                {% if not item.is_file %}
+                    <div class="mt-2">
+                        <a href="#" class="reset-link btn btn-outline-secondary btn-xs py-1 px-2"
+                            data-field-id="{{ item.form_field.auto_id }}"
+                            data-field-type="{% spaceless %}
+                            {% if item.is_checkbox %}checkbox
+                            {% elif item.is_multi_select %}multi-select
+                            {% elif item.is_datetime %}datetime
+                            {% elif item.is_date %}date
+                            {% endif %}
+                            {% endspaceless %}"
+                            data-default="{% spaceless %}
+                            {% if item.is_checkbox %}{% if item.raw_default %}true{% else %}false{% endif %}
+                            {% elif item.is_multi_select %}{{ item.json_default }}
+                            {% elif item.is_date %}{{ item.raw_default|date:"U" }}
+                            {% elif item.is_datetime %}{{ item.raw_default|date:"U" }}
+                            {% else %}{{ item.default }}
+                            {% endif %}
+                            {% endspaceless %}">
+                            <i class="fas fa-undo fa-xs me-1"></i>{% trans "Reset to default" %}
+                        </a>
+                    </div>
+                {% endif %}
+            </td>
+            <td class="align-middle text-center py-3">
+                {% if item.modified %}
+                    <img src="{% static 'admin/img/icon-yes.svg' %}" alt="{{ item.modified }}" title="{% trans 'Yes' %}" width="16" height="16">
+                {% else %}
+                    <img src="{% static 'admin/img/icon-no.svg' %}" alt="{{ item.modified }}" title="{% trans 'No' %}" width="16" height="16">
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

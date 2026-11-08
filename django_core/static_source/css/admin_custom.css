@@ -1,0 +1,899 @@
+/* ============================================================================
+   ADMIN CUSTOM CSS - TEMPLATE
+   Custom refinements for Django Jazzmin, Constance & Django 5/6 widgets
+   ========================================================================== */
+
+/* ----------------------------------------------------------------------------
+   0. UNIVERSAL SPACING & NAVBAR REFINEMENTS
+   ---------------------------------------------------------------------------- */
+
+/* Icon spacing inside buttons and badges */
+.btn > i,
+.btn > .fas,
+.btn > .far,
+.btn > .fa,
+.badge > i,
+.badge > .fas,
+.badge > .far,
+.badge > .fa {
+    margin-right: 0.4rem !important;
+}
+
+/* Icon-only buttons should not have margin */
+.btn-navbar > i,
+.btn-navbar > .fas,
+.btn:has(> i:only-child) > i,
+.btn:has(> .fas:only-child) > .fas,
+.btn:has(> .far:only-child) > .far {
+    margin-right: 0 !important;
+}
+
+/* Navbar links visibility */
+#jazzy-navbar {
+    background-color: var(--bs-body-bg) !important;
+    border-bottom: 1px solid var(--bs-border-color) !important;
+}
+
+#jazzy-navbar .nav-link {
+    color: var(--bs-body-color) !important;
+    font-weight: 500 !important;
+    transition: color 0.15s ease !important;
+}
+
+#jazzy-navbar .nav-link:hover,
+#jazzy-navbar .nav-link:focus {
+    color: var(--bs-primary) !important;
+}
+
+#jazzy-navbar .navbar-nav .nav-link.active {
+    color: var(--bs-primary) !important;
+}
+
+/* Navbar search input group */
+#jazzy-navbar .input-group {
+    width: auto;
+    max-width: 280px;
+    height: 34px;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    background-color: var(--bs-tertiary-bg) !important;
+    border: 1px solid var(--bs-border-color) !important;
+    border-radius: 0.375rem !important;
+    overflow: hidden;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+#jazzy-navbar .input-group:focus-within {
+    border-color: var(--bs-primary) !important;
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25) !important;
+    background-color: var(--bs-body-bg) !important;
+}
+
+#jazzy-navbar .form-control-navbar {
+    flex: 1 1 auto;
+    background-color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: var(--bs-body-color) !important;
+    font-size: 0.85rem !important;
+    padding: 0.3rem 0.75rem !important;
+    height: 100% !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+}
+
+#jazzy-navbar .form-control-navbar:focus {
+    background-color: transparent !important;
+    background: transparent !important;
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+#jazzy-navbar .btn-navbar {
+    flex: 0 0 auto;
+    background-color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    color: var(--bs-secondary-color) !important;
+    padding: 0 0.75rem !important;
+    height: 100% !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: background-color 0.15s ease, color 0.15s ease !important;
+}
+
+#jazzy-navbar .btn-navbar:hover,
+#jazzy-navbar .btn-navbar:focus {
+    background-color: var(--bs-primary) !important;
+    color: #fff !important;
+}
+
+#jazzy-navbar .btn-navbar i,
+#jazzy-navbar .btn-navbar .fas {
+    margin: 0 !important;
+    font-size: 0.85rem !important;
+    line-height: 1 !important;
+}
+
+
+/* ----------------------------------------------------------------------------
+   1. CONSTANCE CONFIGURATION & HISTORY
+   ---------------------------------------------------------------------------- */
+
+.constance-table-wrapper {
+    background-color: var(--bs-body-bg);
+}
+
+.constance-table-wrapper table th .item-name {
+    font-size: 0.95rem;
+    color: var(--bs-body-color);
+}
+
+.constance-table-wrapper table th .item-anchor {
+    opacity: 0.4;
+    transition: opacity 0.15s ease-in-out;
+}
+
+.constance-table-wrapper table th .item-anchor:hover {
+    opacity: 1;
+    color: var(--bs-primary);
+}
+
+.constance-default-val {
+    max-height: 120px;
+    overflow-y: auto;
+    word-break: break-word;
+    border-color: var(--bs-border-color) !important;
+}
+
+.constance-input-wrapper textarea {
+    display: block;
+    width: 100% !important;
+    min-height: 85px;
+    padding: 0.45rem 0.65rem;
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: var(--bs-body-color);
+    background-color: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 0.375rem;
+    resize: vertical;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.constance-input-wrapper textarea:focus {
+    border-color: var(--bs-primary);
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+.constance-input-wrapper input[type="text"],
+.constance-input-wrapper input[type="number"],
+.constance-input-wrapper select {
+    display: block;
+    width: 100% !important;
+    padding: 0.375rem 0.65rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--bs-body-color);
+    background-color: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 0.375rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.constance-input-wrapper input[type="text"]:focus,
+.constance-input-wrapper input[type="number"]:focus,
+.constance-input-wrapper select:focus {
+    border-color: var(--bs-primary);
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+.constance-input-wrapper input[type="checkbox"] {
+    width: 1.15rem;
+    height: 1.15rem;
+    cursor: pointer;
+}
+
+.constance-table-wrapper .reset-link {
+    font-size: 0.775rem;
+    font-weight: 500;
+}
+
+.constance .sticky-bottom {
+    position: sticky;
+    bottom: 0.75rem;
+    z-index: 100;
+}
+
+
+/* ----------------------------------------------------------------------------
+   2. FILTER_HORIZONTAL & FILTER_VERTICAL (GROUPS, PERMISSIONS)
+   ---------------------------------------------------------------------------- */
+
+.related-widget-wrapper:has(.selector) {
+    align-items: flex-start !important;
+    width: 100%;
+}
+
+.related-widget-wrapper:has(.selector) .related-widget-wrapper-link {
+    margin-top: 0.4rem;
+}
+
+.selector {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    gap: 0.5rem;
+}
+
+.selector-available,
+.selector-chosen {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.selector-available-title,
+.selector-chosen-title,
+.selector-available h2,
+.selector-chosen h2 {
+    margin: 0 !important;
+    padding: 0.5rem 0.75rem !important;
+    background-color: var(--bs-tertiary-bg) !important;
+    border: 1px solid var(--bs-border-color) !important;
+    border-radius: 0.375rem 0.375rem 0 0 !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    color: var(--bs-body-color) !important;
+}
+
+.selector-available-title .helptext,
+.selector-chosen-title .helptext {
+    display: none !important;
+}
+
+.selector-available-title label,
+.selector-chosen-title label {
+    margin-bottom: 0 !important;
+    display: block;
+}
+
+.selector .selector-filter {
+    margin: 0 !important;
+    padding: 0.4rem 0.5rem !important;
+    border-left: 1px solid var(--bs-border-color) !important;
+    border-right: 1px solid var(--bs-border-color) !important;
+    border-bottom: 1px solid var(--bs-border-color) !important;
+    background-color: var(--bs-body-bg) !important;
+    position: relative;
+}
+
+.selector .selector-filter label {
+    margin: 0;
+    display: block;
+}
+
+.selector .selector-filter .search-label-icon {
+    display: none;
+}
+
+.selector .selector-filter::before {
+    content: "\f002";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--bs-secondary-color);
+    font-size: 0.75rem;
+    pointer-events: none;
+}
+
+.selector .selector-filter input {
+    width: 100% !important;
+    padding: 0.3rem 0.6rem 0.3rem 1.9rem !important;
+    font-size: 0.825rem !important;
+    border: 1px solid var(--bs-border-color) !important;
+    border-radius: 0.25rem !important;
+    background-color: var(--bs-body-bg) !important;
+    color: var(--bs-body-color) !important;
+}
+
+.selector select {
+    width: 100% !important;
+    height: 15rem !important;
+    flex: 1 1 auto;
+    padding: 0.35rem 0.5rem !important;
+    font-size: 0.85rem !important;
+    color: var(--bs-body-color) !important;
+    background-color: var(--bs-body-bg) !important;
+    border-left: 1px solid var(--bs-border-color) !important;
+    border-right: 1px solid var(--bs-border-color) !important;
+    border-bottom: none !important;
+    border-top: none !important;
+    border-radius: 0 !important;
+}
+
+.selector select option {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.2rem;
+}
+
+.selector select option:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.15);
+}
+
+.selector select option:checked,
+html[data-bs-theme="dark"] .selector select option:checked {
+    background-color: var(--bs-primary) !important;
+    color: #fff !important;
+}
+
+.selector ul.selector-chooser {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0.5rem 0.25rem;
+    margin: 0;
+    list-style: none;
+    gap: 0.4rem;
+}
+
+.selector ul.selector-chooser li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.selector ul.selector-chooser button,
+.selector ul.selector-chooser a {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 2.25rem !important;
+    height: 2.25rem !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background-color: var(--bs-secondary-bg) !important;
+    border: 1px solid var(--bs-border-color) !important;
+    border-radius: 0.375rem !important;
+    color: var(--bs-body-color) !important;
+    font-size: 0 !important;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.selector ul.selector-chooser button:hover,
+.selector ul.selector-chooser a:hover {
+    background-color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+    color: #fff !important;
+}
+
+.selector ul.selector-chooser button::before,
+.selector ul.selector-chooser a::before {
+    font-family: "Font Awesome 5 Free" !important;
+    font-weight: 900 !important;
+    font-size: 0.85rem !important;
+    line-height: 1 !important;
+    color: inherit !important;
+}
+
+.selector ul.selector-chooser .selector-chooseall::before { content: "\f101" !important; }
+.selector ul.selector-chooser .selector-add::before { content: "\f054" !important; }
+.selector ul.selector-chooser .selector-remove::before { content: "\f053" !important; }
+.selector ul.selector-chooser .selector-clearall::before { content: "\f100" !important; }
+
+button.selector-chooseall,
+button.selector-clearall {
+    display: block !important;
+    width: 100% !important;
+    padding: 0.35rem 0.5rem !important;
+    margin: 0 !important;
+    background-color: var(--bs-secondary-bg) !important;
+    border: 1px solid var(--bs-border-color) !important;
+    border-radius: 0 0 0.375rem 0.375rem !important;
+    color: var(--bs-secondary-color) !important;
+    font-size: 0.8rem !important;
+    font-weight: 500 !important;
+    text-align: center !important;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+button.selector-chooseall:hover,
+button.selector-clearall:hover {
+    background-color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+    color: #fff !important;
+}
+
+.selector-chosen .list-footer-display {
+    display: none !important;
+}
+
+
+/* ----------------------------------------------------------------------------
+   3. DATE & TIME INPUTS & SHORTCUTS (ВАЖНЫЕ ДАТЫ)
+   ---------------------------------------------------------------------------- */
+
+p.datetime {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+}
+
+p.datetime label {
+    font-weight: 600;
+    margin-bottom: 0;
+    margin-right: 0.25rem;
+}
+
+p.datetime input.vDateField,
+p.datetime input.vTimeField {
+    display: inline-block !important;
+    width: auto !important;
+    min-width: 140px;
+    padding: 0.35rem 0.65rem !important;
+    font-size: 0.875rem !important;
+    color: var(--bs-body-color) !important;
+    background-color: var(--bs-body-bg) !important;
+    border: 1px solid var(--bs-border-color) !important;
+    border-radius: 0.375rem !important;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+p.datetime input.vDateField:focus,
+p.datetime input.vTimeField:focus {
+    border-color: var(--bs-primary) !important;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+.datetimeshortcuts {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.35rem !important;
+    font-size: 0 !important; /* Hides raw text node pipes */
+}
+
+.datetimeshortcuts a,
+.datetimeshortcuts button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 2.1rem !important;
+    padding: 0 0.65rem !important;
+    background-color: var(--bs-secondary-bg) !important;
+    border: 1px solid var(--bs-border-color) !important;
+    border-radius: 0.375rem !important;
+    color: var(--bs-body-color) !important;
+    font-size: 0.8rem !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    line-height: 1 !important;
+    vertical-align: middle !important;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease !important;
+}
+
+.datetimeshortcuts a:hover,
+.datetimeshortcuts button:hover {
+    background-color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+    color: #fff !important;
+}
+
+/* Dedicated styling for calendar and clock trigger buttons */
+.datetimeshortcuts button[id^="calendarlink"],
+.datetimeshortcuts button[id^="clocklink"],
+.datetimeshortcuts button.date-icon,
+.datetimeshortcuts button.clock-icon {
+    width: 2.1rem !important;
+    padding: 0 !important;
+}
+
+.datetimeshortcuts button span.date-icon,
+.datetimeshortcuts button span.clock-icon {
+    font-size: 0.85rem !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+}
+
+.date-icon::before,
+.clock-icon::before {
+    font-family: "Font Awesome 5 Free" !important;
+    font-weight: 900 !important;
+    font-size: 0.85rem !important;
+    line-height: 1 !important;
+    display: inline-block;
+}
+
+.date-icon::before {
+    content: "\f073" !important;
+}
+
+.clock-icon::before {
+    content: "\f017" !important;
+}
+
+
+/* ----------------------------------------------------------------------------
+   4. CALENDAR & CLOCK POPUP DIALOGS (HTML <dialog> FIXES)
+   ---------------------------------------------------------------------------- */
+
+dialog.calendarbox,
+dialog.clockbox {
+    position: fixed !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 20em !important;
+    max-width: 90vw !important;
+    background-color: var(--bs-body-bg) !important;
+    color: var(--bs-body-color) !important;
+    border: 1px solid var(--bs-border-color) !important;
+    border-radius: 0.5rem !important;
+    box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.25) !important;
+    z-index: 1055 !important;
+    overflow: hidden !important;
+    text-align: center;
+}
+
+dialog.clockbox {
+    width: 14em !important;
+}
+
+dialog.calendarbox::backdrop,
+dialog.clockbox::backdrop {
+    background: transparent !important;
+}
+
+/* Calendar Caption (Month & Year) */
+dialog.calendarbox .calendar caption {
+    caption-side: top !important;
+    margin: 0 !important;
+    padding: 0.65rem 2.5rem !important;
+    background-color: var(--bs-tertiary-bg) !important;
+    color: var(--bs-body-color) !important;
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    border: none !important;
+    border-bottom: 1px solid var(--bs-border-color) !important;
+    text-align: center !important;
+}
+
+/* Clock Header */
+dialog.clockbox h2 {
+    margin: 0 !important;
+    padding: 0.65rem 1rem !important;
+    background-color: var(--bs-tertiary-bg) !important;
+    color: var(--bs-body-color) !important;
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    border: none !important;
+    border-bottom: 1px solid var(--bs-border-color) !important;
+    text-align: center !important;
+}
+
+/* Month Navigation Buttons (Previous / Next) */
+dialog.calendarbox .calendarnav-previous,
+dialog.calendarbox .calendarnav-next {
+    position: absolute !important;
+    top: 0.45rem !important;
+    width: 1.8rem !important;
+    height: 1.8rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: transparent !important;
+    color: var(--bs-body-color) !important;
+    font-size: 0 !important;
+    text-indent: 0 !important;
+    border-radius: 0.25rem !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    z-index: 10 !important;
+    transition: background-color 0.15s ease, color 0.15s ease !important;
+}
+
+dialog.calendarbox .calendarnav-previous:hover,
+dialog.calendarbox .calendarnav-next:hover {
+    background-color: var(--bs-secondary-bg) !important;
+    color: var(--bs-primary) !important;
+}
+
+dialog.calendarbox .calendarnav-previous {
+    left: 0.5rem !important;
+}
+
+dialog.calendarbox .calendarnav-next {
+    right: 0.5rem !important;
+}
+
+dialog.calendarbox .calendarnav-previous::before,
+dialog.calendarbox .calendarnav-next::before {
+    font-family: "Font Awesome 5 Free" !important;
+    font-weight: 900 !important;
+    font-size: 0.85rem !important;
+    color: currentColor !important;
+}
+
+dialog.calendarbox .calendarnav-previous::before {
+    content: "\f053" !important;
+}
+
+dialog.calendarbox .calendarnav-next::before {
+    content: "\f054" !important;
+}
+
+/* Calendar Table */
+dialog.calendarbox .calendar table {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    border-collapse: collapse !important;
+    background-color: transparent !important;
+}
+
+dialog.calendarbox .calendar th {
+    padding: 0.4rem 0.2rem !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    background-color: var(--bs-tertiary-bg) !important;
+    color: var(--bs-secondary-color) !important;
+    border-bottom: 1px solid var(--bs-border-color) !important;
+    border-top: none !important;
+    text-align: center !important;
+}
+
+dialog.calendarbox .calendar td {
+    padding: 0 !important;
+    border: 1px solid var(--bs-border-color) !important;
+    font-size: 0.8rem !important;
+    text-align: center !important;
+}
+
+dialog.calendarbox .calendar td a {
+    display: block !important;
+    padding: 0.35rem 0.2rem !important;
+    color: var(--bs-body-color) !important;
+    text-decoration: none !important;
+    transition: background-color 0.1s ease, color 0.1s ease;
+}
+
+dialog.calendarbox .calendar td a:hover {
+    background-color: var(--bs-primary) !important;
+    color: #fff !important;
+}
+
+dialog.calendarbox .calendar td.today a {
+    font-weight: 700 !important;
+    background-color: var(--bs-secondary-bg) !important;
+    color: var(--bs-primary) !important;
+}
+
+dialog.calendarbox .calendar td.selected a {
+    background-color: var(--bs-primary) !important;
+    color: #fff !important;
+    font-weight: 700 !important;
+}
+
+dialog.calendarbox .calendar td.nonday {
+    background-color: var(--bs-tertiary-bg) !important;
+    color: transparent !important;
+    border-color: var(--bs-border-color) !important;
+}
+
+/* Calendar Shortcuts */
+dialog.calendarbox .calendar-shortcuts {
+    padding: 0.4rem 0.5rem !important;
+    background-color: var(--bs-tertiary-bg) !important;
+    border-top: 1px solid var(--bs-border-color) !important;
+    font-size: 0.775rem !important;
+    color: var(--bs-secondary-color) !important;
+    text-align: center !important;
+}
+
+dialog.calendarbox .calendar-shortcuts a {
+    color: var(--bs-primary) !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    padding: 0.1rem 0.35rem !important;
+    margin: 0 0.15rem !important;
+    border-radius: 0.2rem !important;
+    transition: background-color 0.1s ease;
+}
+
+dialog.calendarbox .calendar-shortcuts a:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.15) !important;
+    text-decoration: none !important;
+}
+
+/* Calendar & Clock Cancel */
+dialog.calendarbox .calendar-cancel,
+dialog.clockbox .calendar-cancel {
+    margin: 0 !important;
+    padding: 0.4rem 0.5rem !important;
+    background-color: var(--bs-secondary-bg) !important;
+    border-top: 1px solid var(--bs-border-color) !important;
+    text-align: center !important;
+}
+
+dialog.calendarbox .calendar-cancel a,
+dialog.clockbox .calendar-cancel a {
+    display: block !important;
+    color: var(--bs-secondary-color) !important;
+    font-size: 0.775rem !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    transition: color 0.15s ease;
+}
+
+dialog.calendarbox .calendar-cancel a:hover,
+dialog.clockbox .calendar-cancel a:hover {
+    color: var(--bs-danger) !important;
+}
+
+/* Clock Timelist */
+dialog.clockbox ul.timelist {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0.35rem 0 !important;
+}
+
+dialog.clockbox ul.timelist li {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+dialog.clockbox ul.timelist li a {
+    display: block !important;
+    padding: 0.35rem 1rem !important;
+    color: var(--bs-body-color) !important;
+    text-decoration: none !important;
+    font-size: 0.85rem !important;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+dialog.clockbox ul.timelist li a:hover {
+    background-color: var(--bs-primary) !important;
+    color: #fff !important;
+}
+
+
+/* ----------------------------------------------------------------------------
+   5. UI BUILDER (CONTROL-SIDEBAR) SLIDE-OUT DRAWER
+   ---------------------------------------------------------------------------- */
+
+aside.control-sidebar.ui-customiser {
+    position: fixed !important;
+    top: 0 !important;
+    right: -340px !important;
+    bottom: 0 !important;
+    width: 320px !important;
+    height: 100vh !important;
+    z-index: 1050 !important;
+    background-color: #1e293b !important;
+    color: #f1f5f9 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.35) !important;
+    transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    display: block !important;
+}
+
+aside.control-sidebar.ui-customiser.control-sidebar-open {
+    right: 0 !important;
+}
+
+.control-sidebar-content {
+    padding: 1.25rem !important;
+}
+
+.control-sidebar-content h5 {
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 0.5rem !important;
+    color: #fff !important;
+}
+
+.control-sidebar-content hr {
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    margin: 0.75rem 0 !important;
+}
+
+.control-sidebar-content p {
+    font-size: 0.8rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    color: #94a3b8 !important;
+    margin-top: 1rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.control-sidebar-content label {
+    font-size: 0.85rem !important;
+    color: #e2e8f0 !important;
+    cursor: pointer !important;
+    vertical-align: middle !important;
+}
+
+.control-sidebar-content input[type="checkbox"] {
+    margin-right: 0.45rem !important;
+    cursor: pointer !important;
+    vertical-align: middle !important;
+}
+
+.ui-customiser select {
+    display: block !important;
+    width: 100% !important;
+    padding: 0.35rem 0.6rem !important;
+    font-size: 0.85rem !important;
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+    border: 1px solid #334155 !important;
+    border-radius: 0.375rem !important;
+    margin-bottom: 0.75rem !important;
+}
+
+.ui-customiser select:focus {
+    border-color: #38bdf8 !important;
+    outline: none !important;
+}
+
+.ui-customiser .menu-items {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    margin-bottom: 1rem !important;
+}
+
+.ui-customiser .menu-items div {
+    width: 36px !important;
+    height: 22px !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    transition: transform 0.15s ease, opacity 0.15s ease, border-color 0.15s ease !important;
+    border: 2px solid transparent !important;
+    box-sizing: border-box !important;
+}
+
+.ui-customiser .menu-items div:hover {
+    transform: scale(1.1) !important;
+    opacity: 1 !important;
+}
+
+.ui-customiser .menu-items div.inactive {
+    opacity: 0.35 !important;
+}
+
+.ui-customiser .menu-items div.active {
+    opacity: 1 !important;
+    border: 2px solid #fff !important;
+    box-shadow: 0 0 0 2px #38bdf8 !important;
+}
+
+.ui-customiser button[data-bs-target="#codeBox"] {
+    display: block !important;
+    width: 100% !important;
+    margin-top: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+    font-weight: 600 !important;
+}
+

@@ -1,0 +1,95 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static admin_urls %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'admin:index' %}">{% translate 'Home' %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'admin:constance_config_changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a></li>
+    <li class="breadcrumb-item active">{% translate 'History' %}</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="col-12" id="content-main">
+    <div class="card card-outline card-primary shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="card-title font-weight-bold mb-0">
+                <i class="fas fa-history text-primary me-2"></i>{% translate 'History' %}: {{ opts.verbose_name_plural|capfirst }}
+            </h3>
+            <a href="{% url 'admin:constance_config_changelist' %}" class="btn btn-outline-secondary btn-sm">
+                <i class="fas fa-arrow-left me-1"></i>К настройкам
+            </a>
+        </div>
+        <div class="card-body p-0 table-responsive">
+            {% if action_list %}
+                <table class="table table-striped table-hover table-bordered m-0 align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col" style="width: 25%;">
+                                <i class="far fa-clock me-1 text-muted"></i>{% translate 'Date/time' %}
+                            </th>
+                            <th scope="col" style="width: 25%;">
+                                <i class="far fa-user me-1 text-muted"></i>{% translate 'User' %}
+                            </th>
+                            <th scope="col">
+                                <i class="fas fa-pen me-1 text-muted"></i>{% translate 'Action' %}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for action in action_list %}
+                    <tr>
+                        <th scope="row" class="text-nowrap font-weight-normal text-muted">
+                            <span class="badge bg-light border text-dark py-1 px-2">
+                                {{ action.action_time|date:"d.m.Y H:i:s" }}
+                            </span>
+                        </th>
+                        <td>
+                            <span class="font-weight-bold">
+                                <i class="fas fa-user-circle text-secondary me-1"></i>
+                                {{ action.user.get_username }}
+                            </span>
+                            {% if action.user.get_full_name %}
+                                <span class="text-muted small">({{ action.user.get_full_name }})</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="text-break">{{ action.get_change_message }}</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="p-4 text-center text-muted">
+                    <i class="fas fa-info-circle fa-2x mb-2 text-secondary"></i>
+                    <p class="mb-0">{% translate "This object doesn't have a change history." %}</p>
+                </div>
+            {% endif %}
+        </div>
+        {% if action_list %}
+        <div class="card-footer d-flex justify-content-between align-items-center py-2 bg-light">
+            <div class="small text-muted">
+                {{ action_list.paginator.count }} {% blocktranslate count counter=action_list.paginator.count %}запись{% plural %}записей{% endblocktranslate %}
+            </div>
+            {% if pagination_required %}
+            <nav aria-label="Пагинация истории">
+                <ul class="pagination pagination-sm m-0">
+                    {% for i in page_range %}
+                        {% if i == action_list.paginator.ELLIPSIS %}
+                            <li class="page-item disabled"><span class="page-link">{{ action_list.paginator.ELLIPSIS }}</span></li>
+                        {% elif i == action_list.number %}
+                            <li class="page-item active"><span class="page-link">{{ i }}</span></li>
+                        {% else %}
+                            <li class="page-item"><a class="page-link" href="?{{ page_var }}={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
