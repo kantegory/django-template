@@ -123,7 +123,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # CSRF settings
 CSRF_TRUSTED_ORIGINS = env.list(
     "CSRF_TRUSTED_ORIGINS",
-    default=["http://localhost:3337", "http://127.0.0.1:3337"],
+    default=["http://localhost:1337", "http://127.0.0.1:1337"],
 )
 
 # CORS headers

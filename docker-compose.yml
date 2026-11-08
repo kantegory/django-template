@@ -9,7 +9,7 @@ services:
             - 5432
 
         volumes:
-            - ./dbs/postgres-data:/var/lib/postgresql/data
+            - postgres_data:/var/lib/postgresql/data
 
         healthcheck:
             test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
@@ -27,7 +27,7 @@ services:
             - 6379
 
         volumes:
-            - ./dbs/redis-data:/data/
+            - redis_data:/data/
 
         healthcheck:
             test: ["CMD", "redis-cli", "ping"]
@@ -58,6 +58,13 @@ services:
             redis:
                 condition: service_healthy
 
+        healthcheck:
+            test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/docs/schema.json')"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
+            start_period: 15s
+
     dramatiq:
         image: template_django_core
         container_name: template_dramatiq
@@ -75,7 +82,7 @@ services:
             redis:
                 condition: service_healthy
             backend:
-                condition: service_started
+                condition: service_healthy
 
     nginx:
         build: ./nginx
@@ -83,7 +90,7 @@ services:
         restart: always
 
         ports:
-            - 3337:80
+            - 1337:80
 
         env_file:
             - ./nginx/.env
@@ -93,4 +100,9 @@ services:
             - ./django_core/static:/var/www/static
 
         depends_on:
-            - backend
+            backend:
+                condition: service_healthy
+
+volumes:
+    postgres_data:
+    redis_data:

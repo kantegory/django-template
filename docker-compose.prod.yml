@@ -1,0 +1,127 @@
+services:
+    db:
+        image: postgres:17
+        container_name: template_db_prod
+        env_file:
+            - ./django_core/.env
+
+        expose:
+            - 5432
+
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
+
+        restart: always
+        logging: &default-logging
+            driver: "json-file"
+            options:
+                max-size: "10m"
+                max-file: "3"
+
+    redis:
+        image: redis
+        container_name: template_redis_prod
+
+        expose:
+            - 6379
+
+        volumes:
+            - redis_data:/data/
+
+        healthcheck:
+            test: ["CMD", "redis-cli", "ping"]
+            interval: 5s
+            timeout: 3s
+            retries: 5
+
+        restart: always
+        logging: *default-logging
+
+    backend:
+        image: template_django_core
+        container_name: template_backend_prod
+        build:
+            context: ./django_core
+            dockerfile: Dockerfile
+        env_file:
+            - ./django_core/.env
+
+        command: gunicorn -w 4 django_core.wsgi:application --bind 0.0.0.0:8000
+
+        expose:
+            - 8000
+
+        volumes:
+            - static_volume:/var/www/apps/django_core/static
+            - media_volume:/var/www/apps/django_core/media
+
+        depends_on:
+            db:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+
+        healthcheck:
+            test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/docs/schema.json')"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
+            start_period: 20s
+
+        restart: always
+        logging: *default-logging
+
+    dramatiq:
+        image: template_django_core
+        container_name: template_dramatiq_prod
+        env_file:
+            - ./django_core/.env
+
+        command: python manage.py rundramatiq
+
+        volumes:
+            - media_volume:/var/www/apps/django_core/media
+
+        depends_on:
+            redis:
+                condition: service_healthy
+            backend:
+                condition: service_healthy
+
+        stop_grace_period: 60s
+        restart: always
+        logging: *default-logging
+
+    nginx:
+        build:
+            context: ./nginx
+            dockerfile: Dockerfile
+
+        ports:
+            - 1337:80
+
+        env_file:
+            - ./nginx/.env
+
+        volumes:
+            - static_volume:/var/www/static:ro
+            - media_volume:/var/www/media:ro
+
+        depends_on:
+            backend:
+                condition: service_healthy
+
+        restart: always
+        logging: *default-logging
+
+volumes:
+    postgres_data:
+    redis_data:
+    static_volume:
+    media_volume:
