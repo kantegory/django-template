@@ -16,12 +16,12 @@ Instructions and operational context for agents working in this repository.
 
 - **Template stack**: Python 3.12, Django 6.1.3, Django Modern REST (DMR), Dramatiq 2.2.1, Psycopg 3, PostgreSQL, Redis, Nginx, Gunicorn.
 - **Directory root vs. Django root**: The Django project lives inside `django_core/` (`django_core/manage.py`), not the workspace root.
-- **Nginx host port**: Nginx maps container port `80` to host port `3337` (`http://localhost:3337`).
+- **Nginx host port**: Nginx maps container port `80` to host port `1337` (`http://localhost:1337`).
 - **Services in Docker Compose**:
-  - `backend`: Gunicorn reload on `8000`. Runs `migrate` and `collectstatic` on startup.
+  - `backend`: Gunicorn reload on `8000`. Runs `migrate` and `collectstatic` on startup via entrypoint, with healthcheck.
   - `dramatiq`: Runs Dramatiq worker (`python manage.py rundramatiq`).
-  - `db`: PostgreSQL with volume mounted to `./dbs/postgres-data`.
-  - `redis`: Redis with volume mounted to `./dbs/redis-data`.
+  - `db`: PostgreSQL 17 using named volume `postgres_data`.
+  - `redis`: Redis using named volume `redis_data`.
   - `nginx`: Reverse proxy with media/static mounts.
 
 ---
@@ -30,8 +30,11 @@ Instructions and operational context for agents working in this repository.
 
 ### Docker Compose (Root Directory)
 ```bash
-# Start all services
+# Start development environment
 docker compose up -d
+
+# Start production environment
+docker compose -f docker-compose.prod.yml up -d
 
 # View service logs
 docker compose logs -f backend
@@ -84,7 +87,7 @@ flake8 .
 
 ## Known Code Quirks & Warnings
 
-- **CSRF Origin on Host Port 3337**: Requests via Nginx from host must be listed in `CSRF_TRUSTED_ORIGINS` (includes `http://localhost:3337` and `http://127.0.0.1:3337`).
+- **CSRF Origin on Host Port 1337**: Requests via Nginx from host must be listed in `CSRF_TRUSTED_ORIGINS` (includes `http://localhost:1337` and `http://127.0.0.1:1337`).
 - **Django Modern REST (DMR) Conventions**:
   - DMR skills for AI agents are available in `.agents/skills/` (`dmr`, `dmr-from-drf`, `dmr-from-django-ninja`, `dmr-from-dj-rest-auth`, `dmr-openapi-skeleton`, `dmr-upgrade`).
   - Controller methods expect request body argument named strictly `parsed_body: Body[...]` (not `body`).
